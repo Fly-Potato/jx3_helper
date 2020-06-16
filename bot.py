@@ -1,10 +1,15 @@
 import nonebot
 from os import path
+from . import config
 
 if __name__ == '__main__':
-    nonebot.init()
+    nonebot.init(config)
     nonebot.load_plugins(
         path.join(path.dirname(__file__), 'jx3', 'plugins'),
         'jx3.plugins'
     )
-    nonebot.run(host='127.0.0.1', port=9996)
+    nonebot.load_plugins(
+        path.join(path.dirname(__file__), 'jx3', 'web'),
+        'jx3.web'
+    )
+    nonebot.run()
