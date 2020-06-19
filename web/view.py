@@ -22,3 +22,5 @@ async def index():
 @app.route('/login')
 async def login():
     return await render_template('login.html')
+
+
