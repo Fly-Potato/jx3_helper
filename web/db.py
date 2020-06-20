@@ -20,7 +20,7 @@ async def init_db():
                                  user=DATABASE['user'], password=DATABASE['password'])
     async with engine.acquire() as conn:
         tables = get_tables()
-        for table in tables():
+        for table in tables:
             try:
                 create_table = sa.schema.CreateTable(table)
                 await conn.execute(create_table)

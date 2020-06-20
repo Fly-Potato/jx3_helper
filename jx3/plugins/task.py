@@ -4,7 +4,8 @@ from json import JSONDecodeError
 
 
 # 日常
-@on_command('daily', aliases=('日常',))
+# TODO:抛弃剑三通接口，本地获取，提供api
+@on_command('日常', only_to_me=False)
 async def daily(session: CommandSession):
     pv = session.get('pv', prompt="请输入想要查询的类型，如pve,pvp,pvx")
     report = await get_daily(pv)
@@ -19,12 +20,12 @@ async def _(session: CommandSession):
     if session.is_first_run:
         # 该命令第一次运行（第一次进入命令会话）
         if stripped_arg:
-            # 第一次运行参数不为空，意味着用户直接将城市名跟在命令名后面，作为参数传入
+            # 第一次运行参数不为空，则作为参数传入
             session.state['pv'] = stripped_arg
         return
 
     if not stripped_arg:
-        # 用户没有发送有效的城市名称（而是发送了空白字符），则提示重新输入
+        # 用户没有发送有效的类型（而是发送了空白字符），则提示重新输入
         # 这里 session.pause() 将会发送消息并暂停当前会话（该行后面的代码不会被运行）
         session.pause('要查询的类型不能为空，请重新输入')
 
@@ -33,7 +34,7 @@ async def _(session: CommandSession):
     if not stripped_arg == 'pve' and not stripped_arg == 'pvp' and not stripped_arg == 'pvx':
         session.pause('要查询的类型错误，请重新输入')
 
-    # 如果当前正在向用户询问更多信息（例如本例中的要查询的城市），且用户输入有效，则放入会话状态
+    # 如果当前正在向用户询问更多信息，且用户输入有效，则放入会话状态
     session.state[session.current_key] = stripped_arg
 
 
