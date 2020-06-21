@@ -1,8 +1,11 @@
-from nonebot import on_command, CommandSession
+from nonebot import on_command, CommandSession, get_bot
 from config import BASE_DIR
 import os.path
 import httpx
 import asyncio
+
+
+bot = get_bot()
 
 
 @on_command('server', aliases=("开服", "开服查询"))
@@ -41,14 +44,24 @@ async def check_server(server_name):
     async with httpx.AsyncClient() as client:
         res = await client.get('http://jx3gc.autoupdate.kingsoft.com/jx3hd/zhcn_hd/serverlist/serverlist.ini')
         lines = res.text.split('\n')
+        # app.logger.debug(lines)
         for line in lines:
-            _server = line.split(' ')
-            if _server[1].index(server_name):
+            _server = line.split('\t')
+            # app.logger.debug(_server)
+            if _server[1].find(server_name) >= 0:
                 ip = _server[3]
                 port = int(_server[4])
-                socket = await asyncio.open_connection(host=ip, port=port)
-                if socket:
+                try:
+                    # 设置协程超时
+                    await asyncio.wait_for(asyncio.open_connection(host=ip, port=port, loop=bot.loop), 3.0,
+                                           loop=bot.loop)
                     return _server[1]+"已开服！"
-                else:
-                    return _server[1]+"维护中！"
+                except asyncio.exceptions.TimeoutError as e:
+                    return _server[1] + "维护中！"
+                # try:
+                #     socket = await asyncio.open_connection(host=ip, port=111, loop=bot.loop)
+                #     if socket:
+                #         return _server[1]+"已开服！"
+                # except OSError as e:
+                #     return _server[1] + "维护中！"
         return "服务器{}未找到".format(server_name)
