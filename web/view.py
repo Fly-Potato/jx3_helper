@@ -5,6 +5,10 @@ import json
 import os
 import httpx
 import asyncio
+import json
+import js2py
+from config import FLOWERS
+
 
 bot = nonebot.get_bot()
 app = bot.server_app
@@ -25,3 +29,4 @@ async def index():
 @app.route('/login')
 async def login():
     return await render_template('login.html')
+
