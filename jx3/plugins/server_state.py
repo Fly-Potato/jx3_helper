@@ -8,7 +8,7 @@ import asyncio
 bot = get_bot()
 
 
-@on_command('server', aliases=("开服", "开服查询"))
+@on_command('server', aliases=("开服", "开服查询"), only_to_me=False)
 async def server_state(session: CommandSession):
     # server_list_path = os.path.join(BASE_DIR, 'jx3', 'server_list.txt')
     server_name = session.get('server_name', prompt="请输入想要查询的服务器名称")
@@ -28,7 +28,7 @@ async def _(session: CommandSession):
         # 该命令第一次运行（第一次进入命令会话）
         if stripped_arg:
             # 第一次运行参数不为空，作为参数传入
-            session.state['pv'] = stripped_arg
+            session.state['server_name'] = stripped_arg
         return
 
     if not stripped_arg:
