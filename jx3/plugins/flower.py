@@ -49,7 +49,12 @@ async def get_args(stripped_arg, session):
         if server_name in SERVER_KEYWORD.keys():
             server_name = SERVER_KEYWORD[server_name]
         async with httpx.AsyncClient() as client:
-            res = await client.get('http://jx3gc.autoupdate.kingsoft.com/jx3hd/zhcn_hd/serverlist/serverlist.ini')
+            try:
+                res = await client.get('http://jx3gc.autoupdate.kingsoft.com/jx3hd/zhcn_hd/serverlist/serverlist.ini')
+            except Exception as e:
+                logger.error(e)
+                await session.send(str(e))
+                return
             lines = res.text.split('\n')
             for line in lines:
                 _server = line.split('\t')
