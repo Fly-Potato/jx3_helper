@@ -1,5 +1,5 @@
 import nonebot
-from quart_auth import AuthManager, login_required
+from quart_auth import AuthManager, AuthUser, login_required, login_user, current_user
 from quart import render_template, Blueprint
 import json
 import os
@@ -22,11 +22,14 @@ app.template_folder = os.path.join('web', 'templates')
 
 
 @app.route('/')
+@login_required
 async def index():
     return "index"
 
 
 @app.route('/login')
 async def login():
-    return await render_template('login.html')
+    login_user(AuthUser(2))
+    print(auth_manager.load_cookie())
+    return "123"
 
