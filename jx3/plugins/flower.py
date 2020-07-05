@@ -18,6 +18,7 @@ async def flower(session: CommandSession):
             msg = "[CQ:share,url={},title={}]".format(url, "全服花价")
         else:
             msg = "全服花价：\n{}".format(url)
+    logger.debug("send msg...")
     await session.send(msg)
 
 
@@ -53,6 +54,7 @@ async def get_args(stripped_arg, session):
                 res = await client.get('http://jx3gc.autoupdate.kingsoft.com/jx3hd/zhcn_hd/serverlist/serverlist.ini')
             except Exception as e:
                 logger.error(e)
+                logger.debug("send msg...")
                 await session.send(str(e))
                 return
             lines = res.text.split('\n')
