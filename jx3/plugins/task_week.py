@@ -1,10 +1,11 @@
-from nonebot import on_command, CommandSession
+from nonebot import on_command, CommandSession, logger
 import httpx
 
 
 @on_command('周常', only_to_me=False)
 async def task_week(session: CommandSession):
     report = await get_task_week()
+    logger.debug("周常 send msg..")
     await session.send(report)
 
 
