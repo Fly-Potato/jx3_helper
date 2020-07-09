@@ -7,7 +7,7 @@ async def kefu(session: CommandSession):
     async with httpx.AsyncClient() as client:
         try:
             res = await client.get("https://jx3.xoyo.com/client/v3_kefu.txt")
-            await session.bot.send(res.text)
+            logger.info(await session.send(res.text, ignore_failure=False))
         except Exception as e:
             logger.error(e)
             await session.send(e)
