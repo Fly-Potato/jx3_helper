@@ -1,5 +1,5 @@
 import nonebot
-from quart_auth import AuthManager, AuthUser, login_required, login_user, current_user
+from quart_auth import AuthManager, AuthUser, login_required, login_user, current_user, renew_login
 from quart import render_template, Blueprint
 import json
 import os
@@ -29,7 +29,10 @@ async def index():
 
 @app.route('/login')
 async def login():
-    login_user(AuthUser(2))
-    print(auth_manager.load_cookie())
+    user = AuthUser(2)
+    login_user(user)
+    # print(user.auth_id)
+    print(current_user.auth_id)
+    renew_login()
     return "123"
 
